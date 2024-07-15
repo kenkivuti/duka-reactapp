@@ -55,6 +55,7 @@ function Login() {
       }
       console.log("Done....", responseData);
       localStorage.setItem("Token", responseData.access_token);
+      console.log('Navigating to Dashboard');
       navigate("/Dashboard");
     } catch (error) {
       console.log(error);
