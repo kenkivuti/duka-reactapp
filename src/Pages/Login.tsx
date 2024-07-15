@@ -62,7 +62,8 @@ function Login() {
   };
 
   return (
-    <MDBContainer fluid className="p-3 my-5 h-custom">
+   <MDBContainer fluid className="p-3 my-5 h-custom">
+    <form onSubmit={handleSubmit}> 
       <MDBRow>
         <MDBCol col="10" md="6">
           <img
@@ -125,7 +126,7 @@ function Login() {
           </div>
 
           <div className="text-center text-md-start mt-4 pt-2">
-            <MDBBtn className="mb-0 px-5" type="submit" onClick={handleSubmit}>
+            <MDBBtn className="mb-0 px-5" type="submit">
               Login
             </MDBBtn>
             <p className="small fw-bold mt-2 pt-1 mb-2">
@@ -181,7 +182,8 @@ function Login() {
           </MDBBtn>
         </div>
       </div>
-    </MDBContainer>
+    </form>
+  </MDBContainer>
   );
 }
 
