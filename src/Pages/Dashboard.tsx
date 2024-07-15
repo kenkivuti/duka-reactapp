@@ -4,6 +4,7 @@ import 'chart.js/auto';
 import { Line, Bar } from "react-chartjs-2";
 import Logout from "./logout";
 import '../Styles/dashboard.css'
+import url from "../config";
 
 interface DashboardData {
   date: string;
@@ -26,7 +27,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const apiUrl = "http://127.0.0.1:8000/dashboard";
+        const apiUrl = `${url}/dashboard`;
         const Token = localStorage.getItem("Token");
         if (!Token) {
           throw new Error("Access token not found");

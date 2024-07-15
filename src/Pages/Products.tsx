@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../Styles/product.css"; 
+import "../Styles/product.css";
+import url from "../config"; 
 
 interface Product {
   id: number;
@@ -15,7 +16,7 @@ const Products: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const apiUrl = 'http://127.0.0.1:8000/products';
+        const apiUrl = `${url}/products`;
         const Token = localStorage.getItem('Token');
         if (! Token) {
           throw new Error('Token not found');

@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "@fortawesome/fontawesome-free/css/all.min.css"; // Ensure FontAwesome CSS is imported
 import "../Styles/login.css";
+import url from "../config";
 
 function Login() {
   // const dispatch = useDispatch();
@@ -40,7 +41,7 @@ function Login() {
     };
 
     try {
-      const apiUrl = "http://46.101.217.191:5000/login";
+      const apiUrl = `${url}/login`;
       const response = await axios.post(apiUrl, formContent, {
         headers: {
           "Content-Type": "application/json",

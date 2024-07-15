@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
+import url from '../config';
 
 
 interface Sale {
@@ -16,7 +17,7 @@ const Sales: React.FC = () => {
     useEffect(() => {
         const fetchsales = async () => {
         try {
-            const apiUrl = 'http://127.0.0.1:8000/sales';
+            const apiUrl = `${url}/sales`;
             const Token = localStorage.getItem('Token');
             if (! Token) {
               throw new Error('Token not found');

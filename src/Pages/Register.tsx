@@ -13,6 +13,7 @@ import {
   MDBIcon,
   MDBCheckbox,
 } from "mdb-react-ui-kit";
+import url from "../config";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://46.101.217.191:5000/register", {
+      const response = await axios.post(`${url}/register`, {
         username,
         email,
         password,
