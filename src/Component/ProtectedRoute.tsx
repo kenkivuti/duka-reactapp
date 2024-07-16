@@ -5,7 +5,7 @@ export default function Protected(){
 
         const login_status=localStorage.getItem("Token")
         console.log("Token",login_status)
-        if (!login_status || login_status!=="true"){
+        if (!login_status){
             return <Navigate to ="/login" />
         }
         return login_status ? <Outlet/> : <Navigate to= "/login" />
