@@ -8,5 +8,5 @@ export default function Protected(){
         if (!login_status || login_status!=="true"){
             return <Navigate to ="/login" />
         }
-    return login_status ? <Outlet/> : <Navigate to= "/login" />
+        return login_status ? <Outlet/> : <Navigate to= "/login" />
 };
