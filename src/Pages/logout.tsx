@@ -8,7 +8,7 @@ const Logout = () => {
     const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         // Clearing the local storage
-        localStorage.removeItem('token');
+        localStorage.removeItem('Token');
         localStorage.removeItem('isLoggedIn');
 
         // Navigating to the login page after clearing the local storage
