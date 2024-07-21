@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../Styles/product.css";
-import url from "../config"; 
-// import { color } from "chart.js/helpers";
+import url from "../config";
 
 interface Product {
   id: number;
   name: string;
   price: number;
   quantity: number;
+  product_image: string;
 }
 
 const Products: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  }
-
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: 0,
-    quantity: 0
+    quantity: 0,
+    product_image: null as File | null
   });
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
 
   const fetchProducts = async () => {
     try {
@@ -38,6 +38,7 @@ const Products: React.FC = () => {
           'Authorization': `Bearer ${Token}`,
         }
       });
+      console.log("Products fetched:", response.data);
 
       setProducts(response.data);
     } catch (error) {
@@ -50,10 +51,10 @@ const Products: React.FC = () => {
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type, files } = e.target;
     setNewProduct({
       ...newProduct,
-      [name]: value,
+      [name]: type === "file" ? files ? files[0] : null : value,
     });
   };
 
@@ -65,19 +66,31 @@ const Products: React.FC = () => {
       if (!Token) {
         throw new Error('Token not found');
       }
-      const response = await axios.post<Product>(apiUrl, newProduct, {
+
+      const formData = new FormData();
+      formData.append('name', newProduct.name);
+      formData.append('price', String(newProduct.price));
+      formData.append('quantity', String(newProduct.quantity));
+      if (newProduct.product_image) {
+        formData.append('product_image', newProduct.product_image);
+      }
+
+      const response = await axios.post<Product>(apiUrl, formData, {
         headers: {
-          'Authorization': `Bearer ${Token}`
+          'Authorization': `Bearer ${Token}`,
+          'Content-Type': 'multipart/form-data'
         }
       });
+
       setProducts([...products, response.data]);
       setNewProduct({
         name: "",
         price: 0,
-        quantity: 0
+        quantity: 0,
+        product_image: null
       });
       setIsModalOpen(false);
-      await fetchProducts();  // Ensure fetchProducts is awaited
+      await fetchProducts();
     } catch (error) {
       console.error('Error adding product:', error);
     }
@@ -85,14 +98,16 @@ const Products: React.FC = () => {
 
   return (
     <div>
-      <h1> Products</h1>
+      <h1>Products</h1>
       <div className="table-container">
         <button
           className="btn btn-primary"
           onClick={toggleModal}
-        >Input Product</button>
-        
-        <br/>
+        >
+          Input Product
+        </button>
+
+        <br />
 
         {/* modal component */}
         {isModalOpen && (
@@ -134,6 +149,14 @@ const Products: React.FC = () => {
                     className="form-input p-2 border border-gray-300 rounded w-full"
                   />
                 </div>
+                <div className="mb-4">
+                  <input
+                    type="file"
+                    name="product_image"
+                    onChange={handleInputChange}
+                    className="form-input p-2 border border-gray-300 rounded w-full"
+                  />
+                </div>
                 <div className="flex justify-end">
                   <button
                     type="submit"
@@ -152,13 +175,16 @@ const Products: React.FC = () => {
               </form>
               <button
                 className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-600"
-                onClick={toggleModal}>
-               exit</button>
+                onClick={toggleModal}
+              >
+                Exit
+              </button>
             </div>
           </div>
         )}
-        <br/>
-        <br/>
+
+        <br />
+        <br />
 
         <table className="table">
           <thead>
@@ -167,15 +193,25 @@ const Products: React.FC = () => {
               <th>Name</th>
               <th>Price</th>
               <th>Quantity</th>
+              <th>Image</th>
             </tr>
           </thead>
           <tbody>
-            {products.map(product => (
+            {products.map((product) => (
               <tr key={product.id}>
                 <td>{product.id}</td>
                 <td>{product.name}</td>
                 <td>{product.price}</td>
                 <td>{product.quantity}</td>
+                <td>
+                  {product.product_image && (
+                    <img
+                      src={product.product_image}
+                      alt={product.name}
+                      style={{ width: "100px", height: "100px" }}
+                    />
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -183,6 +219,6 @@ const Products: React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Products;
